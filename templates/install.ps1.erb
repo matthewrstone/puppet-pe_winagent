@@ -1,0 +1,50 @@
+Param(
+  [string]$temp = 'c:\temp\puppet'
+)
+
+$master = "<%= @puppetserver %>"
+$ca = "<%= @caserver %>"
+$puppet = "C:\Program Files\Puppet Labs\Puppet Enterprise\bin\puppet.bat"
+$source = "https://<%= @puppetserver %>:8140/packages/current"
+$package = "puppet-enterprise-<%= @pe_build %>-x64.msi"
+$install = "$temp\$source /qn"
+
+function downloadPuppet {
+  [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}
+  $uri = "$source/$package"
+  $obj = New-Object System.Net.WebClient
+  $link = $obj.DownloadString($uri)
+  Write-Host "Downloading Puppet Enterprise <%= @pe_build %>..."
+  Invoke-WebRequest $uri -OutFile $temp\$package
+}
+
+function installPuppet {
+  $install = "$temp\$package"
+  $opts = "/qn"
+  Write-Host "Installing Puppet Enterprise 3.8.0..."
+  Start-Process $install $opts -Wait
+}
+
+function validateInstall {
+  If ((Get-WmiObject -Class Win32_Product).Name -match 'Puppet Enterprise') {
+    Write-Host "Puppet Enterprise has been installed..."
+  } else {
+    Throw {
+      "Something went wrong with the installation.  Please check your settings and connectivity and try again."
+    }
+  }
+}
+
+function configurePuppet {
+  Write-Host "Configuring Puppet Enterprise <%= @pe_build %>..."
+  Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set server $master --section main }
+  Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set ca_server $ca --section main }
+  Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set archive_file_server $master --section main }
+}
+
+downloadPuppet
+installPuppet
+validateInstall
+configurePuppet
+
+Write-Host "Installation has completed..."
