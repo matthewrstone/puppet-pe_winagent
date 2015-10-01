@@ -51,3 +51,8 @@ When running the client script, it only accepts two parameters:
 * This should work without puppet dependencies (other than pe_repo included in the Puppet Enterprise installation) and should technically work with all 2008/2012 editions, though it has only been tested with 2012 R2.
 
 * More importantly that Windows version is the Powershell version.  The scripts were written and tested under Powershell 4.0.  The check your version, from a Powershell prompt type `$PSVersionTable.PSVersion`.  If your Major version is less than for, [you may want to upgrade](https://www.microsoft.com/en-us/download/details.aspx?id=40855).
+
+### Changelog
+**v1.0.2**
+- Switched from using 'curl' to using pe_staging module (couldn't use nanliu/staging due to a conflict in earlier version of PE (ENTERPRISE-258).
+- Added case statement to handle the new versioning for Puppet Agent in the PE 2015 releases.

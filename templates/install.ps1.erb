@@ -6,7 +6,7 @@ $master = "<%= @puppetserver %>"
 $ca = "<%= @caserver %>"
 $puppet = "C:\Program Files\Puppet Labs\Puppet Enterprise\bin\puppet.bat"
 $source = "https://<%= @puppetserver %>:8140/packages/current"
-$package = "puppet-enterprise-<%= @pe_build %>-x64.msi"
+$package = "<%= @msi %>"
 $install = "$temp\$source /qn"
 
 function downloadPuppet {
@@ -21,7 +21,7 @@ function downloadPuppet {
 function installPuppet {
   $install = "$temp\$package"
   $opts = "/qn"
-  Write-Host "Installing Puppet Enterprise 3.8.0..."
+  Write-Host "Installing Puppet Enterprise <%= @pe_build %>..."
   Start-Process $install $opts -Wait
 }
 
