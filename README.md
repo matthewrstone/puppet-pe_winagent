@@ -13,6 +13,8 @@ To install, clone this repository to your modules directory:
 
 	git clone https://github.com/matthewrstone/puppet-pe_winagent.git pe_winagent
 
+If you're seeing this from the Puppet forge, a simple `puppet module install souldo/pe_winagent` will suffice.
+
 Then apply the pe_winagent class to your Puppetmaster (and additional compile masters if needed).
 
 #### Client Script
@@ -37,12 +39,28 @@ When running the client script, it only accepts two parameters:
 
 * Apply the pe_winagent module to your puppetmaster (and additional compilers if needed).
 
-* Copy the install-puppet-enterprise.ps1 script to either your Windows image or just a clean new Windows server.
+Now you must choose your own adventure...
 
-* From the Windows server, run ./install-puppet-enterprise.ps1 -master <your puppet master>
+#### Local Installation Method ####
+* Copy the local-puppet-install script to either your Windows image or just a clean new Windows server.
+
+* From the Windows server, run ./local-puppet-install -master <your puppet master>
 
 * Once the script has completed you should be registered with Puppet.  Accept the cert and give it a whirl. 
 
+#### PS Remote Method ####
+* Copy the remote-puppet-install.ps1 and remote-puppet.ps1 scripts to a server/workstation that is a trusted host for WinRM.
+
+* Create an optional list of machines you wish to install Puppet on.  This list will be the value of the -ComputerList parameter.  Use a single host name as the value if you only have one machine to work with.
+
+* Run the remote installer:
+
+		./remote-puppet-install `
+		-ComputerList <computerlist.txt/server name> `
+		-Master <your.puppet.master.com> `
+		-Temp <optional, only if you don't want to use c:\temp>
+		
+* Once the script has completed, puppet should be installed and configured on the Windows server.
 
 ### Notes
 
@@ -54,5 +72,9 @@ When running the client script, it only accepts two parameters:
 
 ### Changelog
 **v1.0.2**
+
 - Switched from using 'curl' to using pe_staging module (couldn't use nanliu/staging due to a conflict in earlier version of PE (ENTERPRISE-258).
+
 - Added case statement to handle the new versioning for Puppet Agent in the PE 2015 releases.
+
+- Overhauled powershell scripts for remote agent installation via PS Remoting.
