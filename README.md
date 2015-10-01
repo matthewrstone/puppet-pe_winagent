@@ -19,7 +19,13 @@ Then apply the pe_winagent class to your Puppetmaster (and additional compile ma
 
 #### Client Script
 
-The next step is the Powershell script in `pe_winagent/files`.  The `install-puppet-enterprise.ps1` script is intended to be run from the Windows client server.
+The next step is the Powershell script in `pe_winagent/files`.  The `local-puppet-install` script is intended to be run from the Windows client server.  You can alternately use the remote method with the `remote-puppet-install` and `remote-puppet` scripts.
+
+##### Which is better? #####
+
+Well, think of it this way.  If you use local and you can hard code the parameters...say if you are absolutely certain of your master server settings for the long haul, you can add that script to the first run when a Windows Server is provisioned and automate adding that node to Puppet.
+
+Otherwise, if you are bringing servers up and then going through an install process, you can target many at once with the remote scripts.  However, you need to know how to configure WinRM so you can execute command remotely.
 
 ###Parameters
 
