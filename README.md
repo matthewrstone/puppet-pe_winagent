@@ -65,7 +65,7 @@ This is a powershell module with a few basic functions to install puppet either 
 	Install-Puppet -Remote -ComputerList myserver -Master my.puppetmaster.local
 		
 	Install Puppet Remotely on multiple hosts:
-	Install-Puppet -Remote -ComputerList (Get-Content myservers.csv) -Master my.puppetmaster.local
+	Install-Puppet -Remote -ComputerList myservers.csv -Master my.puppetmaster.local
 		
 	Upgrade the current node:
 	Install-Puppet -Local -Master my.puppetmaster.local
@@ -76,7 +76,7 @@ This is a powershell module with a few basic functions to install puppet either 
 
 * This should work without puppet dependencies (other than pe_repo included in the Puppet Enterprise installation) and should technically work with all 2008/2012 editions, though it has only been tested with 2012 R2.
 
-* More importantly that Windows version is the Powershell version.  The scripts were written and tested under Powershell 4.0.  The check your version, from a Powershell prompt type `$PSVersionTable.PSVersion`.  If your Major version is less than for, [you may want to upgrade](https://www.microsoft.com/en-us/download/details.aspx?id=40855).
+* More importantly than Windows version is the Powershell version.  The scripts were written and tested under Powershell 4.0.  The check your version, from a Powershell prompt type `$PSVersionTable.PSVersion`.  If your Major version is less than 4, [you may want to upgrade](https://www.microsoft.com/en-us/download/details.aspx?id=40855).
 
 ### Changelog
 **v2.0**

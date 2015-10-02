@@ -2,19 +2,21 @@
 class pe_winagent(
   $puppetserver = $settings::server,
   $caserver     = $settings::ca_server,
-  $public_dir   = $::pe_repo::public_dir
-) inherits pe_repo {
-
+) {
+  $public_dir = $::pe_repo::public_dir
+  $s3_link    = 'https://s3.amazonaws.com'
   case $::pe_build {
     '2015.2.1' : {
       $msi        = 'puppet-agent-1.2.5-x64.msi'
-      $s3_url     = "https://s3.amazonaws.com/puppet-agents/2015.2/puppet-agent/1.2.5/repos/windows/${msi}"
+      $s3_path    = 'puppet-agents/2015.2/puppet-agent/1.2.5/repos/windows'
+      $s3_url     = "${s3_link}/${s3_path}/${msi}"
       $puppet_bat = 'C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat'
     }
     default    : {
       $msi        = "puppet-enterprise-${::pe_build}-x64.msi"
-      $s3_url     = "https://s3.amazonaws.com/pe-builds/released/${::pe_build}/puppet-enterprise-${::pe_build}-x64.msi"
-      $puppet_bat = 'C:\Program Files\Puppet Labs\Puppet Enterprise\bin\puppet.bat' 
+      $s3_path    = "pe-builds/released/${::pe_build}"
+      $s3_url     = "${s3_link}/pe-builds/released/${::pe_build}/${msi}"
+      $puppet_bat = 'C:\Program Files\Puppet Labs\Puppet Enterprise\bin\puppet.bat'
     }
   }
 

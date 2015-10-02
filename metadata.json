@@ -1,17 +1,17 @@
 {
   "name": "souldo-pe_winagent",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "Matthew Stone",
   "license": "Apache-2.0",
   "summary": "Manages current Puppet Enterprise MSI and installation script",
   "source": "https://github.com/matthewrstone/puppet-pe_winagent",
-  "project_page": "https://forge.puppetlabs.com/souldo/pe_winagent",
+  "project_page": "https://github.com/matthewrstone/puppet-pe_winagent",
   "issues_url": "https://github.com/matthewrstone/puppet-pe_winagent/issues",
-  "tags": ["windows", "powershell","repo","msi"],
+  "tags": ["windows","powershell","repo","msi","agent"],
   "operatingsystem_support": [
     {
     "operatingsystem": "Windows",
-    "operatingsystemrelease": [ "2012","2012 R2" ]
+    "operatingsystemrelease": [ "2008","2012","2012 R2" ]
     }
    ],
   "dependencies": []

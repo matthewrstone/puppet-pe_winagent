@@ -14,29 +14,29 @@ function downloadPuppet {
   $uri = "$source/$package"
   $obj = New-Object System.Net.WebClient
   $link = $obj.DownloadString($uri)
-  Write-Host "Downloading Puppet Enterprise <%= @pe_build %>..."
+  Write-Host "Downloading Puppet Enterprise <%= @pe_build %> on $env:COMPUTERNAME..."
   Invoke-WebRequest $uri -OutFile $temp\$package
 }
 
 function installPuppet {
   $install = "$temp\$package"
   $opts = "/qn"
-  Write-Host "Installing Puppet Enterprise <%= @pe_build %>..."
+  Write-Host "Installing Puppet Enterprise <%= @pe_build %> on $env:COMPUTERNAME..."
   Start-Process $install $opts -Wait
 }
 
 function validateInstall {
   If ((Get-WmiObject -Class Win32_Product).Name -match 'Puppet') {
-    Write-Host "Puppet Enterprise has been installed..."
+    Write-Host "Puppet Enterprise has been installed on $env:COMPUTERNAME"
   } else {
     Throw {
-      "Something went wrong with the installation.  Please check your settings and connectivity and try again."
+      "Something went wrong with the installation on $env:COMPUTERNAME.  Check the event log."
     }
   }
 }
 
 function configurePuppet {
-  Write-Host "Configuring Puppet Enterprise <%= @pe_build %>..."
+  Write-Host "Configuring Puppet Enterprise <%= @pe_build %> on $env:COMPUTERNAME..."
   Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set server $master --section main }
   Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set ca_server $ca --section main }
   Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set archive_file_server $master --section main }

@@ -8,19 +8,15 @@ Function Install-PuppetLocal {
   $obj = New-Object System.Net.WebClient
   $link = $obj.DownloadString($uri)
 
-  Write-Host "Download Installation Script..."
+  Write-Host "Getting installation script from Puppetmaster on $env:COMPUTERNAME..."
   Invoke-WebRequest $uri -Outfile $Temp\install.ps1
 
-  Write-Host "Running Puppet Enterprise installer script..."
+  Write-Host "Running Puppet Enterprise installation script on $env:COMPUTERNAME..."
   Invoke-Expression "$Temp\install.ps1 -temp $Temp"
 }
 
 
 Function Install-PuppetRemote {
-#  Param($puppetopts)
-#  $Master = $puppetopts.Master
-#  $Temp = $puppetopts.Temp
-#  $ComputerList = $puppetopts.ComputerList
 Param (
     $Master,
     $Temp,
@@ -33,7 +29,12 @@ Param (
     ComputerList = $ComputerList
   }
 
-  Invoke-Command -ComputerName $ComputerList `
+  If ((Test-Path $ComputerList)) {
+  $servers = (Get-Content $ComputerList)
+  } else {
+  $servers = $ComputerList }
+
+  Invoke-Command -ComputerName $servers `
   -Credential $creds -ScriptBlock {
     Param ($puppetopts)
     $Master = $puppetopts.Master
@@ -41,7 +42,7 @@ Param (
     $ComputerList = $puppetopts.ComputerList
     
     If ((Test-Path $Temp) -match 'False') {
-    Write-Host "Creating Temporary Directory..."
+    Write-Host "Creating Temporary Directory on $env:COMPUTERNAME..."
     New-Item -Path $Temp -ItemType Directory -Force | Out-Null
     }
 
@@ -51,10 +52,10 @@ Param (
     $obj = New-Object System.Net.WebClient
     $link = $obj.DownloadString($uri)
 
-    Write-Host "Download Installation Script..."
+    Write-Host "Downloading Installation Script on $env:COMPUTERNAME..."
     Invoke-WebRequest $uri -Outfile $Temp\install.ps1
 
-    Write-Host "Running Puppet Enterprise installer script..."
+    Write-Host "Running Puppet Enterprise installer script on $env:COMPUTERNAME..."
     Invoke-Expression "$Temp\install.ps1 -temp $Temp"
   } -ArgumentList $puppetopts
 }
