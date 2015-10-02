@@ -16,7 +16,7 @@ class pe_winagent(
     }
   }
 
-  $file_dest  = "${public_dir}/${::pe_build}/${msi}"
+  $file_dest  = "${public_dir}/${::pe_build}/windows/${msi}"
 
   file { "${public_dir}/${::pe_build}/windows" : ensure => directory }
 
