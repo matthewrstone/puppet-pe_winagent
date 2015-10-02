@@ -7,12 +7,14 @@ class pe_winagent(
 
   case $::pe_build {
     '2015.2.1' : {
-      $msi    = 'puppet-agent-1.2.5-x64.msi'
-      $s3_url = "https://s3.amazonaws.com/puppet-agents/2015.2/puppet-agent/1.2.5/repos/windows/${msi}"
+      $msi        = 'puppet-agent-1.2.5-x64.msi'
+      $s3_url     = "https://s3.amazonaws.com/puppet-agents/2015.2/puppet-agent/1.2.5/repos/windows/${msi}"
+      $puppet_bat = 'C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat'
     }
     default    : {
-      $msi    = "puppet-enterprise-${::pe_build}-x64.msi"
-      $s3_url = "https://s3.amazonaws.com/pe-builds/released/${::pe_build}/puppet-enterprise-${::pe_build}-x64.msi"
+      $msi        = "puppet-enterprise-${::pe_build}-x64.msi"
+      $s3_url     = "https://s3.amazonaws.com/pe-builds/released/${::pe_build}/puppet-enterprise-${::pe_build}-x64.msi"
+      $puppet_bat = 'C:\Program Files\Puppet Labs\Puppet Enterprise\bin\puppet.bat' 
     }
   }
 
