@@ -4,69 +4,71 @@
 
 pe_winagent is a module that riffs on the Linux 'curl' [installation method for Puppet Enterprise](https://docs.puppetlabs.com/pe/latest/install_agents.html) to create a more fluid installation process for Windows nodes.  
 
-The module runs on the master and co-opts the pe_repo class and space to retain the current .msi for Puppet Enterprise.  I've also included a Powershell script to include on your Windows images if you want to fully automate the installation process from zero to Puppet.
+The module runs on the master and co-opts the pe_repo class and space to retain the current .msi for Puppet Enterprise.  Once the MSI is mounted there are two options for installing, a local script or a powershell module for remote installation of Windows nodes.
 
 ###Installation
 
-#### Get the Module
 To install, clone this repository to your modules directory:
 
 	git clone https://github.com/matthewrstone/puppet-pe_winagent.git pe_winagent
 
-If you're seeing this from the Puppet forge, a simple `puppet module install souldo/pe_winagent` will suffice.
+If you're seeing this from the Puppet Forge, a simple `puppet module install souldo/pe_winagent` will suffice.
 
-Then apply the pe_winagent class to your Puppetmaster (and additional compile masters if needed).
+### Usage
 
-#### Client Script
+#### pe_winagent
 
-The next step is the Powershell script in `pe_winagent/files`.  The `local-puppet-install` script is intended to be run from the Windows client server.  You can alternately use the remote method with the `remote-puppet-install` and `remote-puppet` scripts.
+Apply the pe_winagent class to your puppetmaster. and any compilers.  This will download the appropriate puppet agent MSI into the packages/current/windows directory.
 
-##### Which is better? #####
+**Parameters**
 
-Well, think of it this way.  If you use local and you can hard code the parameters...say if you are absolutely certain of your master server settings for the long haul, you can add that script to the first run when a Windows Server is provisioned and automate adding that node to Puppet.
+	puppetserver	= The Puppetmaster hostname, defaults to $settings::server
+	caserver     = The CA Server, defaults tp $settings::ca_server
 
-Otherwise, if you are bringing servers up and then going through an install process, you can target many at once with the remote scripts.  However, you need to know how to configure WinRM so you can execute command remotely.
+#### pe_winagent::powershell_host
 
-###Parameters
+Apply the pe_winagent::powershell_host class to a Windows server to serve as the PowerShell host,  i.e. the server you would remotely execute PowerShell from.  This server must have a minimum of .NET 4.5 and Windows Management Framework 4.0 installed.
 
-#### Module Parameters
+---
 
-	puppetserver => <fqdn of puppet master or vip>
-    caserver     => <fqdn of CA>
+#### PowerShell Script: installpuppet.ps1
 
-#### Client Script Parameters
+This script will allow you to install Puppet locally.  Good for embedding into your provisioning scripts if you have a static Puppetmaster or as a one and done script for getting the most recent version from the Puppetmaster and upgrading the agent.
 
-When running the client script, it only accepts two parameters:
+**Parameters**
 
-	-master		fqdn of the puppet master
-	-temp		the work directory for the installer
+	temp		= set a temporary directory, defaults to c:\temp
+	master		= the hostname of your puppetmaster
 
-###Usage
+**Usage**
 
-* Apply the pe_winagent module to your puppetmaster (and additional compilers if needed).
+	Install Puppet
+	./installpuppet.ps1 -Master mypuppetmaster.internet.local
+	
+---
+	
+#### PowerShell Module: PuppetAgent
 
-Now you must choose your own adventure...
+This is a powershell module with a few basic functions to install puppet either locally or remotely.  If you already have puppet installed on Windows hosts, this would be a good way to ugprade.
 
-#### Local Installation Method ####
-* Copy the local-puppet-install script to either your Windows image or just a clean new Windows server.
+**Cmdlets**
 
-* From the Windows server, run ./local-puppet-install -master <your puppet master>
-
-* Once the script has completed you should be registered with Puppet.  Accept the cert and give it a whirl. 
-
-#### PS Remote Method ####
-* Copy the remote-puppet-install.ps1 and remote-puppet.ps1 scripts to a server/workstation that is a trusted host for WinRM.
-
-* Create an optional list of machines you wish to install Puppet on.  This list will be the value of the -ComputerList parameter.  Use a single host name as the value if you only have one machine to work with.
-
-* Run the remote installer:
-
-		./remote-puppet-install `
-		-ComputerList <computerlist.txt/server name> `
-		-Master <your.puppet.master.com> `
-		-Temp <optional, only if you don't want to use c:\temp>
+	Test-Puppet    = Verify if you are a Jedi.
+	Get-Puppet     = Return the current version of the Puppet Agent installed.
+	Install-Puppet = Installs the puppet agent (retreived from the puppetmaster).
 		
-* Once the script has completed, puppet should be installed and configured on the Windows server.
+**Usage**
+
+		Note: To install Puppet remotely you need to have PSRemoting enabled and have TrustedHosts configured.  If you don't know how to get started on that, you may want to consider the local method for now.
+		
+	Install Puppet Remotely on a single host:
+	Install-Puppet -Remote -ComputerList myserver -Master my.puppetmaster.local
+		
+	Install Puppet Remotely on multiple hosts:
+	Install-Puppet -Remote -ComputerList (Get-Content myservers.csv) -Master my.puppetmaster.local
+		
+	Upgrade the current node:
+	Install-Puppet -Local -Master my.puppetmaster.local
 
 ### Notes
 
@@ -77,7 +79,9 @@ Now you must choose your own adventure...
 * More importantly that Windows version is the Powershell version.  The scripts were written and tested under Powershell 4.0.  The check your version, from a Powershell prompt type `$PSVersionTable.PSVersion`.  If your Major version is less than for, [you may want to upgrade](https://www.microsoft.com/en-us/download/details.aspx?id=40855).
 
 ### Changelog
-**v1.0.2**
+**v2.0**
+
+- Built a powershell module, 'cuz Install-Puppet looks cool.
 
 - Switched from using 'curl' to using pe_staging module (couldn't use nanliu/staging due to a conflict in earlier version of PE (ENTERPRISE-258).
 
