@@ -26,7 +26,7 @@ function installPuppet {
 }
 
 function validateInstall {
-  If ((Get-WmiObject -Class Win32_Product).Name -match 'Puppet Enterprise') {
+  If ((Get-WmiObject -Class Win32_Product).Name -match 'Puppet') {
     Write-Host "Puppet Enterprise has been installed..."
   } else {
     Throw {
