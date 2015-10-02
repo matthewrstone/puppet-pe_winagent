@@ -5,7 +5,7 @@ Param(
 $master = "<%= @puppetserver %>"
 $ca = "<%= @caserver %>"
 $puppet = "C:\Program Files\Puppet Labs\Puppet Enterprise\bin\puppet.bat"
-$source = "https://<%= @puppetserver %>:8140/packages/current"
+$source = "https://<%= @puppetserver %>:8140/packages/current/windows"
 $package = "<%= @msi %>"
 $install = "$temp\$source /qn"
 
