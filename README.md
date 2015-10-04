@@ -1,12 +1,13 @@
 #pe_winagent
 
-###Description
+
+##Description
 
 pe_winagent is a module that riffs on the Linux 'curl' [installation method for Puppet Enterprise](https://docs.puppetlabs.com/pe/latest/install_agents.html) to create a more fluid installation process for Windows nodes.  
 
 The module runs on the master and co-opts the pe_repo class and space to retain the current .msi for Puppet Enterprise.  Once the MSI is mounted there are two options for installing, a local script or a powershell module for remote installation of Windows nodes.
 
-###Installation
+##Installation
 
 To install, clone this repository to your modules directory:
 
@@ -14,60 +15,72 @@ To install, clone this repository to your modules directory:
 
 If you're seeing this from the Puppet Forge, a simple `puppet module install souldo/pe_winagent` will suffice.
 
-### Usage
+## Usage
 
-#### pe_winagent
+### pe_winagent
 
 Apply the pe_winagent class to your puppetmaster. and any compilers.  This will download the appropriate puppet agent MSI into the packages/current/windows directory.
 
-**Parameters**
+#### Parameters
 
 	puppetserver	= The Puppetmaster hostname, defaults to $settings::server
-	caserver     = The CA Server, defaults tp $settings::ca_server
+	caserver     	= The CA Server, defaults tp $settings::ca_server
 
-#### pe_winagent::powershell_host
+### pe_winagent::powershell_host
 
 Apply the pe_winagent::powershell_host class to a Windows server to serve as the PowerShell host,  i.e. the server you would remotely execute PowerShell from.  This server must have a minimum of .NET 4.5 and Windows Management Framework 4.0 installed.
 
 ---
 
-#### PowerShell Script: installpuppet.ps1
+### PowerShell Script: installpuppet.ps1
 
 This script will allow you to install Puppet locally.  Good for embedding into your provisioning scripts if you have a static Puppetmaster or as a one and done script for getting the most recent version from the Puppetmaster and upgrading the agent.
 
-**Parameters**
+#### Parameters
 
 	temp		= set a temporary directory, defaults to c:\temp
 	master		= the hostname of your puppetmaster
 
-**Usage**
+#### Usage
 
-	Install Puppet
+**Install Puppet**
+
 	./installpuppet.ps1 -Master mypuppetmaster.internet.local
 	
 ---
 	
-#### PowerShell Module: PuppetAgent
+### PowerShell Module: PuppetAgent
 
 This is a powershell module with a few basic functions to install puppet either locally or remotely.  If you already have puppet installed on Windows hosts, this would be a good way to ugprade.
 
-**Cmdlets**
+#### Cmdlets
 
 	Test-Puppet    = Verify if you are a Jedi.
 	Get-Puppet     = Return the current version of the Puppet Agent installed.
 	Install-Puppet = Installs the puppet agent (retreived from the puppetmaster).
 		
-**Usage**
+#### Usage
 
-		Note: To install Puppet remotely you need to have PSRemoting enabled and have TrustedHosts configured.  If you don't know how to get started on that, you may want to consider the local method for now.
+** Parameters **
+
+	-Remote			= Install Puppet agent remotely
+	-Local			= Install Puppet agent locally
+	-Master			= Specify the Puppet Master which contains the MSI/install script.
+	-ComputerList	= Either a single hostname or a CSV list of hosts to install remotely.
+
+*Note: To install Puppet remotely you need to have PSRemoting enabled and have TrustedHosts configured.  If you don't know how to get started on that, you may want to consider the local method for now.*
 		
-	Install Puppet Remotely on a single host:
+
+**Install Puppet Remotely on a single host:**
+
 	Install-Puppet -Remote -ComputerList myserver -Master my.puppetmaster.local
 		
-	Install Puppet Remotely on multiple hosts:
+**Install Puppet Remotely on multiple hosts:**
+
 	Install-Puppet -Remote -ComputerList myservers.csv -Master my.puppetmaster.local
 		
-	Upgrade the current node:
+**Upgrade the current node:**
+
 	Install-Puppet -Local -Master my.puppetmaster.local
 
 ### Notes
@@ -81,10 +94,8 @@ This is a powershell module with a few basic functions to install puppet either 
 ### Changelog
 **v2.0**
 
-- Built a powershell module, 'cuz Install-Puppet looks cool.
+- Overhauled powershell scripts to include a module for remote agent installation. Many thanks to Chris Blodgett (@shotah) for the contributions and feedback on the PS side.
 
 - Switched from using 'curl' to using pe_staging module (couldn't use nanliu/staging due to a conflict in earlier version of PE (ENTERPRISE-258).
 
 - Added case statement to handle the new versioning for Puppet Agent in the PE 2015 releases.
-
-- Overhauled powershell scripts for remote agent installation via PS Remoting.
