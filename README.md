@@ -92,6 +92,11 @@ This is a powershell module with a few basic functions to install puppet either 
 * More importantly than Windows version is the Powershell version.  The scripts were written and tested under Powershell 4.0.  The check your version, from a Powershell prompt type `$PSVersionTable.PSVersion`.  If your Major version is less than 4, [you may want to upgrade](https://www.microsoft.com/en-us/download/details.aspx?id=40855).
 
 ### Changelog
+
+**v2.0.2**
+
+- Added support for PE 2015.2.2 and agent 1.2.6.
+
 **v2.0.1**
 
 - Fixed a few puppet lint errors in the powershell host manifest.
