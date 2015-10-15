@@ -6,6 +6,12 @@ class pe_winagent(
   $public_dir = $::pe_repo::public_dir
   $s3_link    = 'https://s3.amazonaws.com'
   case $::pe_build {
+    '2015.2.2' : {
+      $msi        = 'puppet-agent-1.2.6-x64.msi'
+      $s3_path    = 'puppet-agents/2015.2/puppet-agent/1.2.6/repos/windows'
+      $s3_url     = "${s3_link}/${s3_path}/${msi}"
+      $puppet_bat = 'C:\Program Files\Puppet Labs\Puppet\bin\puppet.bat'
+    }
     '2015.2.1' : {
       $msi        = 'puppet-agent-1.2.5-x64.msi'
       $s3_path    = 'puppet-agents/2015.2/puppet-agent/1.2.5/repos/windows'
