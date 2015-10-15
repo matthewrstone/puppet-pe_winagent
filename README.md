@@ -66,7 +66,7 @@ This is a powershell module with a few basic functions to install puppet either 
 	-Remote			= Install Puppet agent remotely
 	-Local			= Install Puppet agent locally
 	-Master			= Specify the Puppet Master which contains the MSI/install script.
-	-ComputerList	= Either a single hostname or a CSV list of hosts to install remotely.
+	-ComputerList		= Either a single hostname or a CSV list of hosts to install remotely.
 
 *Note: To install Puppet remotely you need to have PSRemoting enabled and have TrustedHosts configured.  If you don't know how to get started on that, you may want to consider the local method for now.*
 		
@@ -92,7 +92,16 @@ This is a powershell module with a few basic functions to install puppet either 
 * More importantly than Windows version is the Powershell version.  The scripts were written and tested under Powershell 4.0.  The check your version, from a Powershell prompt type `$PSVersionTable.PSVersion`.  If your Major version is less than 4, [you may want to upgrade](https://www.microsoft.com/en-us/download/details.aspx?id=40855).
 
 ### Changelog
-**v2.0**
+
+**v2.0.2**
+
+- Added support for PE 2015.2.2 and agent 1.2.6.
+
+**v2.0.1**
+
+- Fixed a few puppet lint errors in the powershell host manifest.
+
+**v2.0.0**
 
 - Overhauled powershell scripts to include a module for remote agent installation. Many thanks to Chris Blodgett (@shotah) for the contributions and feedback on the PS side.
 
