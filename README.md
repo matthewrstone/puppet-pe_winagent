@@ -93,6 +93,10 @@ This is a powershell module with a few basic functions to install puppet either 
 
 ### Changelog
 
+**v2.0.3**
+
+- Cleaned up for ongoing future support of PE 2015 versions.  That sounds pretty epic but really I just changed it to base 2015 versions off of the new aio_agent_version fact if it exists to determine what agent package to download.
+
 **v2.0.2**
 
 - Added support for PE 2015.2.2 and agent 1.2.6.
