@@ -3,6 +3,7 @@ class pe_winagent(
   $puppetserver = $settings::server,
   $caserver     = $settings::ca_server,
 ) {
+  include pe_repo
 
   $public_dir  = $::pe_repo::public_dir
   $s3_link     = 'https://s3.amazonaws.com'
