@@ -10,8 +10,8 @@ class pe_winagent(
   $win_dir     = "${public_dir}/${::pe_build}/windows"
 
   if $::aio_agent_version {
-    $msi         = 'puppet-agent-1.2.6-x64.msi'
-    $s3_path     = 'puppet-agents/2015.2/puppet-agent/1.2.6/repos/windows'
+    $msi         = "puppet-agent-${::aio_agent_version}-x64.msi"
+    $s3_path     = "puppet-agents/${::pe_build}/puppet-agent/${::aio_agent_version}/repos/windows"
     $s3_url      = "${s3_link}/${s3_path}/${msi}"
     $puppet_bat  = "${puppet_root}\\Puppet\\bin\\puppet.bat"
   } else {
