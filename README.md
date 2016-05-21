@@ -29,43 +29,30 @@ Apply the pe_winagent class to your puppetmaster. and any compilers.  This will 
 ### pe_winagent::powershell_host
 
 Apply the pe_winagent::powershell_host class to a Windows server to serve as the PowerShell host,  i.e. the server you would remotely execute PowerShell from.  This server must have a minimum of .NET 4.5 and Windows Management Framework 4.0 installed.
-
----
-
-### PowerShell Script: installpuppet.ps1
-
-This script will allow you to install Puppet locally.  Good for embedding into your provisioning scripts if you have a static Puppetmaster or as a one and done script for getting the most recent version from the Puppetmaster and upgrading the agent.
-
-#### Parameters
-
-	temp		= set a temporary directory, defaults to c:\temp
-	master		= the hostname of your puppetmaster
-
-#### Usage
-
-**Install Puppet**
-
-	./installpuppet.ps1 -Master mypuppetmaster.internet.local
 	
 ---
 	
 ### PowerShell Module: PuppetAgent
 
-This is a powershell module with a few basic functions to install puppet either locally or remotely.  If you already have puppet installed on Windows hosts, this would be a good way to ugprade.
+This is a PowerShell module with a few basic functions to install puppet either locally or remotely.  If you already have puppet installed on Windows hosts, this would be a good way to ugprade.
 
 #### Cmdlets
 
-	Test-Puppet    = Verify if you are a Jedi.
-	Get-Puppet     = Return the current version of the Puppet Agent installed.
-	Install-Puppet = Installs the puppet agent (retreived from the puppetmaster).
+	Test-PuppetInstall    = Verify the PS module is working and if a PE agent is installed.
+	Install-Puppet        = Installs the puppet agent from a specified master.
 		
 #### Usage
 
 ** Parameters **
 
-	-Remote			= Install Puppet agent remotely
+	Local options:
 	-Local			= Install Puppet agent locally
 	-Master			= Specify the Puppet Master which contains the MSI/install script.
+	-CertName		= Specify your FQDN for puppet registration.
+	-CAServer		= Specify a CA server for the puppet agent.
+
+	Remote options:
+	-Remote			= Install Puppet agent remotely
 	-ComputerList		= Either a single hostname or a CSV list of hosts to install remotely.
 
 *Note: To install Puppet remotely you need to have PSRemoting enabled and have TrustedHosts configured.  If you don't know how to get started on that, you may want to consider the local method for now.*
@@ -92,6 +79,18 @@ This is a powershell module with a few basic functions to install puppet either 
 * More importantly than Windows version is the Powershell version.  The scripts were written and tested under Powershell 4.0.  The check your version, from a Powershell prompt type `$PSVersionTable.PSVersion`.  If your Major version is less than 4, [you may want to upgrade](https://www.microsoft.com/en-us/download/details.aspx?id=40855).
 
 ### Changelog
+
+**v2.1.0**
+
+- Fixed pathing issue to support Puppet Enterprise 2016.
+- Fixed issue with local installation not passing `-CertName` or `-CAServer` parameters.
+- Added a trap to kill the install process if the server can't be resolved or install script cannot be found.
+- Added exit codes which end up being rather important when automating this thing.
+- Renamed `Test-Puppet` to `Test-PuppetInstall`, which now returns that a) this module is here and b) if Puppet Enterprise is already installed (and what version).
+- Removed the stubs for Uninstall-Puppet and Get-Puppet.
+- Removed the documentation for using install.ps1 as a standalone script. That's as logical as using install.bash and copying it everywhere.
+- Added logic to grab the non-x64 msi so 3.3 support technically exists now.
+
 
 **v2.0.3**
 
