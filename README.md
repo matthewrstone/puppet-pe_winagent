@@ -3,9 +3,9 @@
 
 ##Description
 
-pe_winagent is a module that riffs on the Linux 'curl' [installation method for Puppet Enterprise](https://docs.puppetlabs.com/pe/latest/install_agents.html) to create a more fluid installation process for Windows nodes.  
+pe_winagent is a module that riffs on the Linux 'curl' [installation method for Puppet Enterprise](https://docs.puppetlabs.com/pe/latest/install_agents.html) to create a more fluid installation process for Windows nodes.  It currently supports Puppet Enterprise 3.3, 3.7, 3.8, 2015.x and 2016.x.
 
-The module runs on the master and co-opts the pe_repo class and space to retain the current .msi for Puppet Enterprise.  Once the MSI is mounted there are two options for installing, a local script or a powershell module for remote installation of Windows nodes.
+The module runs on the master and stores the Windows puppet agent MSI for installation.  The module also provides a PowerShell module you can include on your Windows builds to automate or kick off installation on demand.
 
 ##Installation
 
@@ -89,7 +89,7 @@ This is a PowerShell module with a few basic functions to install puppet either 
 - Renamed `Test-Puppet` to `Test-PuppetInstall`, which now returns that a) this module is here and b) if Puppet Enterprise is already installed (and what version).
 - Removed the stubs for Uninstall-Puppet and Get-Puppet.
 - Removed the documentation for using install.ps1 as a standalone script. That's as logical as using install.bash and copying it everywhere.
-- Added logic to grab the non-x64 msi so 3.3 support technically exists now.
+- Puppet Enterprise 3.3 is supported now.
 
 
 **v2.0.3**
