@@ -1,5 +1,7 @@
 Param(
   [string]$temp = 'c:\temp\puppet'
+  [String]$CertName,
+	[String]$CAServer = $Master,
 )
 
 $master = "<%= @puppetserver %>"
@@ -20,7 +22,9 @@ function downloadPuppet {
 
 function installPuppet {
   $install = "$temp\$package"
-  $opts = "/qn"
+  $opts = @("/qn")
+  If ($CAServer) { $opts += "PUPPET_CA_SERVER=$CAServer "}
+  If ($CertName) { $opts += "PUPPET_AGENT_CERTNAME=$CertName "}
   Write-Host "Installing Puppet Enterprise <%= @pe_build %> on $env:COMPUTERNAME..."
   Start-Process $install $opts -Wait
 }
