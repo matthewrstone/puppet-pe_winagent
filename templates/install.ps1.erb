@@ -21,6 +21,10 @@ function downloadPuppet {
 }
 
 function installPuppet {
+  Param(
+    [String]$CertName,
+    [String]$CAServer
+  )
   $install = "$temp\$package"
   $opts = @("/qn")
   If ($CAServer) { $opts += "PUPPET_CA_SERVER=$CAServer "}
@@ -47,7 +51,10 @@ function configurePuppet {
 }
 
 downloadPuppet
-installPuppet
+$params = @{}
+If ($CAServer) { $params += @{ CAServer = $CAServer }
+If ($CertName) { $params += @{ CertName = $CertName }
+installPuppet @params
 validateInstall
 configurePuppet
 
