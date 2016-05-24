@@ -1,5 +1,7 @@
 fixtures:
   symlinks:
-    pe_winagent: #{source_dir}
+    pe_winagent: "#{source_dir}"
   repositories:
-    pe_repo: https://github.com/GeoffWilliams/geoffwilliams-pe_repo.git
+    pe_staging: "https://github.com/matthewrstone/matthewrstone-pe_staging"
+    pe_repo: "https://github.com/matthewrstone/geoffwilliams-pe_repo"
+    stdlib:  "https://github.com/puppetlabs/puppetlabs-stdlib"

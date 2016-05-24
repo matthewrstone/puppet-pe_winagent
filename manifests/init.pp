@@ -4,7 +4,6 @@ class pe_winagent(
   $caserver     = $settings::ca_server,
 ) {
   include pe_repo
-
   $public_dir  = $::pe_repo::public_dir
   $s3_link     = 'https://s3.amazonaws.com'
   $puppet_root = 'C:\Program Files\Puppet Labs'
@@ -17,7 +16,7 @@ class pe_winagent(
     $s3_url      = "${s3_link}/${s3_path}/${msi}"
     $puppet_bat  = "${puppet_root}\\Puppet\\bin\\puppet.bat"
   } else {
-   if $::pe_build =~ /^"3.3"/ {
+    if $::pe_build =~ /^3.3/ {
       $msi = "puppet-enterprise-${::pe_build}.msi"
     } else {
       $msi = "puppet-enterprise-${::pe_build}-x64.msi"
