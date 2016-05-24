@@ -3,7 +3,7 @@ language: ruby
 rvm:
   - 1.9.3
   - 2.1.8
-script: rake spec
+script: rake
 env:
 # https://docs.puppet.com/pe/latest/overview_version_table.html
 # Puppet Enterprise 3.3 / ruby 193
