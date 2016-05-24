@@ -1,0 +1,5 @@
+fixtures:
+  symlinks:
+    pe_winagent: #{source_dir}
+  repositories:
+    pe_repo: https://github.com/GeoffWilliams/geoffwilliams-pe_repo.git

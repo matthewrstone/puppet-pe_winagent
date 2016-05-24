@@ -1,18 +1,39 @@
 #PuppetAgent.psm1
-Function Install-PuppetLocal {
-  Param($puppetopts)
-  If (!(Test-Path $Temp)) { New-Item -Type Directory -Path $Temp -Force}
-  # Configure .NET Object to bypass self signed certificate for this session.
-  [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}
-  $uri = "https://$Master`:8140/packages/current/install.ps1"
-  $obj = New-Object System.Net.WebClient
-  $link = $obj.DownloadString($uri)
+$ModuleVersion = "2.1.0"
 
-  Write-Host "Getting installation script from Puppetmaster on $env:COMPUTERNAME..."
-  Invoke-WebRequest $uri -Outfile $Temp\install.ps1
+Function Install-PuppetLocal {
+	Param(
+	  [Switch]$Local,
+	  [Switch]$Remote,
+	  [String]$ComputerList,
+	  [Parameter(mandatory=$true)][String]$Master,
+    [String]$CertName,
+	  [String]$CAServer = $Master,
+    [String]$Temp = "C:\Temp"
+	)
+  
+  If (!(Test-Path $Temp)) { New-Item -Type Directory -Path $Temp -Force}
+
+  Trap {
+    Write-Host $_.Exception.Message -ForegroundColor Red
+    Break
+  }
+
+    # Configure .NET Object to bypass self signed certificate for this session.
+    [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}
+    $uri = "https://$Master`:8140/packages/current/install.ps1"
+    $obj = New-Object System.Net.WebClient
+    $link = $obj.DownloadString($uri)
+    Write-Host "Getting installation script from Puppetmaster on $env:COMPUTERNAME..."
+    Invoke-WebRequest $uri -Outfile $Temp\install.ps1 -ErrorAction Ignore
 
   Write-Host "Running Puppet Enterprise installation script on $env:COMPUTERNAME..."
-  Invoke-Expression "$Temp\install.ps1 -temp $Temp"
+  $params = @{
+    Temp = $Temp
+  }
+  If ($CAServer) { $params += @{ CAServer = $CAServer } }
+  If ($CertName) { $params += @{ CertName = $CertName } }
+  Invoke-Expression "$Temp\install.ps1 @params"
 }
 
 
@@ -27,6 +48,11 @@ Param (
     Master = $Master
     Temp = $Temp
     ComputerList = $ComputerList
+  }
+
+  Trap {
+    Write-Host $_.Exception.Message -ForegroundColor Red
+    Break
   }
 
   If ((Test-Path $ComputerList)) {
@@ -56,7 +82,7 @@ Param (
     Invoke-WebRequest $uri -Outfile $Temp\install.ps1
 
     Write-Host "Running Puppet Enterprise installer script on $env:COMPUTERNAME..."
-    Invoke-Expression "$Temp\install.ps1 -temp $Temp"
+    Invoke-Expression "$Temp\install.ps1 -temp $Temp" 
   } -ArgumentList $puppetopts
 }
 
@@ -66,29 +92,57 @@ Function Install-Puppet {
 	  [Switch]$Remote,
 	  [String]$ComputerList,
 	  [Parameter(mandatory=$true)][String]$Master,
-      [String]$CertName,
+    [String]$CertName,
 	  [String]$CAServer = $Master,
-      [String]$Temp = "C:\Temp"
+    [String]$Temp = "C:\Temp"
 	)
 
-    If (!($Local) -and !($Remote)) { $Local = $true }
-	If (($Local) -and ($Remote)) { 
+# Default to Local installation if not otherwise specified
+    If (!($Local) -And !($Remote)) { $Local = $true }
+
+# Bad form, kill the script if both options are given.
+	If (($Local) -And ($Remote)) { 
 	  "Don't be greedy.  There can only be one.  Remote or Local.  Decide." | Write-Host -ForegroundColor Red
-	  break
-	} elseif ($Local) {
-	    Install-PuppetLocal -Master $Master -Temp $Temp
-	} elseif ($Remote) {
-        If (!($ComputerList)) { 
-            "You must specifcy ComputerList or server name for remote install.  Exiting!" | Write-Host -ForegroundColor Red
-            break
-        }
-        Install-PuppetRemote -Master $Master -Temp $Temp -ComputerList $ComputerList 
+	  Break
+	} 
+
+# Local Installation
+    If ($Local -And !($Remote)) {
+      $params = @{
+        Master = $Master
+        Temp   = $Temp
+      }
+      
+# Add CA and CertName if specified
+      If ($CertName) { $params += @{ CertName = $CertName } }
+      If ($CAServer) { $params += @{ CAServer = $CAServer } }
+
+      Install-PuppetLocal @params
+	} 
+
+# Remote Installation
+    If ($Remote -And !($Local)) {
+      If (!($ComputerList)) { 
+        "You must specifcy ComputerList or server name for remote install.  Exiting!" | Write-Host -ForegroundColor Red
+        Break
+      }
+
+      $params = @{
+        Master       = $Master
+        Temp         = $Temp
+        ComputerList = $ComputerList
+      }
+
+      Install-PuppetRemote $params 
     }
 }
-Function Uninstall-Puppet {}
-Function Get-Puppet {
-	Invoke-Command -ScriptBlock { $puppetVersion = puppet --version; $puppetVersion | Write-Host -ForegroundColor Green }
-}
-function Test-Puppet {
-	Write-Host "I am a Jedi" -ForegroundColor Green
+
+function Test-PuppetInstall {
+	Write-Host "PE WinAgent PowerShell Module $ModuleVersion is installed." -ForegroundColor Green
+    try {
+      $PuppetVersion = Invoke-Expression -Command "puppet --version"
+      Write-Host "Puppet Agent Version $PuppetVersion is installed."
+    } catch {
+      Write-Host "Puppet Agent is not installed."
+    }
 }
