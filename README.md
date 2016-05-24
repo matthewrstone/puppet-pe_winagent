@@ -3,9 +3,9 @@
 
 ##Description
 
-pe_winagent is a module that riffs on the Linux 'curl' [installation method for Puppet Enterprise](https://docs.puppetlabs.com/pe/latest/install_agents.html) to create a more fluid installation process for Windows nodes.  It currently supports Puppet Enterprise 3.3, 3.7, 3.8, 2015.x and 2016.x.
+pe_winagent is a module that helps with automating the installation process of Puppet Enterprise on Windows servers by riffing on the Linux 'curl' [installation method for Puppet Enterprise](https://docs.puppetlabs.com/pe/latest/install_agents.html) installation process. It currently supports Puppet Enterprise 3.3, 3.7, 3.8, 2015.x and 2016.x.
 
-The module runs on the master and stores the Windows puppet agent MSI for installation.  The module also provides a PowerShell module you can include on your Windows builds to automate or kick off installation on demand.
+The module runs on the master and stores the Windows puppet agent MSI for installation.  The module also provides a PowerShell module to include in your Windows images to automate or kick off installation on demand.
 
 ##Installation
 
@@ -19,7 +19,7 @@ If you're seeing this from the Puppet Forge, a simple `puppet module install sou
 
 ### pe_winagent
 
-Apply the pe_winagent class to your puppetmaster. and any compilers.  This will download the appropriate puppet agent MSI into the packages/current/windows directory.
+Apply the pe_winagent class to your puppetmaster and any compilers.  This will download the appropriate puppet agent MSI into the packages/current/windows directory.
 
 #### Parameters
 
@@ -28,7 +28,7 @@ Apply the pe_winagent class to your puppetmaster. and any compilers.  This will 
 
 ### pe_winagent::powershell_host
 
-Apply the pe_winagent::powershell_host class to a Windows server to serve as the PowerShell host,  i.e. the server you would remotely execute PowerShell from.  This server must have a minimum of .NET 4.5 and Windows Management Framework 4.0 installed.
+This class deploys the PowerShell module to a Windows host, which is good for using a PowerShell host to remotely manage installation and upgrade of puppet agents across your Windows infrastructure.  This server must have a minimum of .NET 4.5 and Windows Management Framework 4.0 installed.  It can also be used to update the PowerShell module across your infrastructure when new releases of this puppet module are released.
 	
 ---
 	
@@ -39,21 +39,17 @@ This is a PowerShell module with a few basic functions to install puppet either 
 #### Cmdlets
 
 	Test-PuppetInstall    = Verify the PS module is working and if a PE agent is installed.
-	Install-Puppet        = Installs the puppet agent from a specified master.
-		
-#### Usage
+	Install-Puppet        = Installs the puppet agent from a specified master.  Parameters below:		
 
-** Parameters **
+	  Local options:
+	  -Local			= Install Puppet agent locally
+	  -Master			= Specify the Puppet Master which contains the MSI/install script.
+	  -CertName		= Specify your FQDN for puppet registration.
+	  -CAServer		= Specify a CA server for the puppet agent.
 
-	Local options:
-	-Local			= Install Puppet agent locally
-	-Master			= Specify the Puppet Master which contains the MSI/install script.
-	-CertName		= Specify your FQDN for puppet registration.
-	-CAServer		= Specify a CA server for the puppet agent.
-
-	Remote options:
-	-Remote			= Install Puppet agent remotely
-	-ComputerList		= Either a single hostname or a CSV list of hosts to install remotely.
+	  Remote options:
+	  -Remote			= Install Puppet agent remotely
+	  -ComputerList		= Either a single hostname or a CSV list of hosts to install remotely.
 
 *Note: To install Puppet remotely you need to have PSRemoting enabled and have TrustedHosts configured.  If you don't know how to get started on that, you may want to consider the local method for now.*
 		
@@ -69,6 +65,10 @@ This is a PowerShell module with a few basic functions to install puppet either 
 **Upgrade the current node:**
 
 	Install-Puppet -Local -Master my.puppetmaster.local
+
+**Install Puppet with a different hostname**
+
+	Install-Puppet -Master my.puppetmaster.local -CertName windowspuppetbox.iscool.local
 
 ### Notes
 
