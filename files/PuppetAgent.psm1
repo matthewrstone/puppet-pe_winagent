@@ -1,4 +1,6 @@
 #PuppetAgent.psm1
+$ModuleVersion = "2.1.0"
+
 Function Install-PuppetLocal {
 	Param(
 	  [Switch]$Local,
@@ -9,7 +11,7 @@ Function Install-PuppetLocal {
 	  [String]$CAServer = $Master,
     [String]$Temp = "C:\Temp"
 	)
-
+  
   If (!(Test-Path $Temp)) { New-Item -Type Directory -Path $Temp -Force}
 
   Trap {
@@ -136,7 +138,11 @@ Function Install-Puppet {
 }
 
 function Test-PuppetInstall {
-	Write-Host "PE WinAgent PowerShell Module is Installed." -ForegroundColor Green
-    $PuppetVersion = Invoke-Expression -Command "puppet --version" -ErrorVariable $VersionError
-    If ($PuppetVersion) { Write-Host "Puppet Enterprise $PuppetVersion is installed." } else { Write-Host "Puppet Enterprise is not installed." }
+	Write-Host "PE WinAgent PowerShell Module $ModuleVersion is installed." -ForegroundColor Green
+    try {
+      $PuppetVersion = Invoke-Expression -Command "puppet --version"
+      Write-Host "Puppet Agent Version $PuppetVersion is installed."
+    } catch {
+      Write-Host "Puppet Agent is not installed."
+    }
 }
