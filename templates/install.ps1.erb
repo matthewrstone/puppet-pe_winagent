@@ -21,12 +21,8 @@ function downloadPuppet {
 }
 
 function installPuppet {
-  Param(
-    [String]$CertName,
-    [String]$CAServer
-  )
   $install = "$temp\$package"
-  $opts = @("/qn")
+  $opts = @()
   If ($CAServer) { $opts += "PUPPET_CA_SERVER=$CAServer "}
   If ($CertName) { $opts += "PUPPET_AGENT_CERTNAME=$CertName "}
   Write-Host "Installing Puppet Enterprise <%= @pe_build %> on $env:COMPUTERNAME..."
@@ -45,17 +41,24 @@ function validateInstall {
 
 function configurePuppet {
   Write-Host "Configuring Puppet Enterprise <%= @pe_build %> on $env:COMPUTERNAME..."
+  If ($CertName) {
+    Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set certname $CertName --section main }
+  }
   Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set server $master --section main }
   Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set ca_server $ca --section main }
   Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set archive_file_server $master --section main }
 }
 
 downloadPuppet
+
 $params = @{}
 If ($CAServer) { $params += @{ CAServer = $CAServer } }
 If ($CertName) { $params += @{ CertName = $CertName } }
+
 installPuppet @params
+
 validateInstall
+
 configurePuppet
 
 Write-Host "Installation has completed..."

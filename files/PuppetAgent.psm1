@@ -5,9 +5,9 @@ Function Install-PuppetLocal {
 	  [Switch]$Remote,
 	  [String]$ComputerList,
 	  [Parameter(mandatory=$true)][String]$Master,
-      [String]$CertName,
+    [String]$CertName,
 	  [String]$CAServer = $Master,
-      [String]$Temp = "C:\Temp"
+    [String]$Temp = "C:\Temp"
 	)
 
   If (!(Test-Path $Temp)) { New-Item -Type Directory -Path $Temp -Force}
@@ -26,7 +26,12 @@ Function Install-PuppetLocal {
     Invoke-WebRequest $uri -Outfile $Temp\install.ps1 -ErrorAction Ignore
 
   Write-Host "Running Puppet Enterprise installation script on $env:COMPUTERNAME..."
-  Invoke-Expression "$Temp\install.ps1 -temp $Temp"
+  $params = @{
+    Temp = $Temp
+  }
+  If ($CAServer) { $params += @{ CAServer = $CAServer } }
+  If ($CertName) { $params += @{ CertName = $CertName } }
+  Invoke-Expression "$Temp\install.ps1 @params"
 }
 
 
@@ -85,9 +90,9 @@ Function Install-Puppet {
 	  [Switch]$Remote,
 	  [String]$ComputerList,
 	  [Parameter(mandatory=$true)][String]$Master,
-      [String]$CertName,
+    [String]$CertName,
 	  [String]$CAServer = $Master,
-      [String]$Temp = "C:\Temp"
+    [String]$Temp = "C:\Temp"
 	)
 
 # Default to Local installation if not otherwise specified
