@@ -82,14 +82,13 @@ This is a PowerShell module with a few basic functions to install puppet either 
 
 **v2.1.0**
 
-- Fixed pathing issue to support Puppet Enterprise 2016.
+- Puppet Enterprise 2016.x is supported now.
+- Puppet Enterprise 3.3 is supported now.
 - Fixed issue with local installation not passing `-CertName` or `-CAServer` parameters.
 - Added a trap to kill the install process if the server can't be resolved or install script cannot be found.
-- Added exit codes which end up being rather important when automating this thing.
 - Renamed `Test-Puppet` to `Test-PuppetInstall`, which now returns that a) this module is here and b) if Puppet Enterprise is already installed (and what version).
 - Removed the stubs for Uninstall-Puppet and Get-Puppet.
 - Removed the documentation for using install.ps1 as a standalone script. That's as logical as using install.bash and copying it everywhere.
-- Puppet Enterprise 3.3 is supported now.
 
 
 **v2.0.3**
