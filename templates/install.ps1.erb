@@ -22,7 +22,7 @@ function downloadPuppet {
 
 function installPuppet {
   $install = "$temp\$package"
-  $opts = @()
+  $opts = @("/qn")
   If ($CAServer) { $opts += "PUPPET_CA_SERVER=$CAServer "}
   If ($CertName) { $opts += "PUPPET_AGENT_CERTNAME=$CertName "}
   Write-Host "Installing Puppet Enterprise <%= @pe_build %> on $env:COMPUTERNAME..."
