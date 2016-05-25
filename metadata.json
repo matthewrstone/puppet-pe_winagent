@@ -1,14 +1,14 @@
 {
   "name": "souldo-pe_winagent",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "author": "Matthew Stone",
-  "summary": "Adds pe_repo for Windows. Includes PowerShell scripts for local/remote agent install.",
+  "summary": "Adds Windows MSI to PE. Includes PowerShell module for automating agent installation.",
   "license": "Apache-2.0",
   "source": "https://github.com/matthewrstone/puppet-pe_winagent",
   "project_page": "https://github.com/matthewrstone/puppet-pe_winagent",
   "issues_url": "https://github.com/matthewrstone/puppet-pe_winagent/issues",
   "dependencies": [
-  
+    { "name": "puppetlabs/stdlib" }
   ],
   "tags": [
     "windows",
