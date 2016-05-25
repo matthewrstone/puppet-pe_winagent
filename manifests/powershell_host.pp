@@ -1,6 +1,6 @@
 # Installs Powershell Module on a Windows host
 class pe_winagent::powershell_host(
-  $ps_home = 'C:\windows\system32\windowspowershell\v1.0',
+  $ps_home = 'C:\\windows\\system32\\windowspowershell\\v1.0',
 ) {
 
   File { source_permissions => ignore }
