@@ -1,0 +1,7 @@
+fixtures:
+  symlinks:
+    pe_winagent: "#{source_dir}"
+  repositories:
+    pe_staging: "https://github.com/matthewrstone/matthewrstone-pe_staging"
+    pe_repo: "https://github.com/matthewrstone/geoffwilliams-pe_repo"
+    stdlib:  "https://github.com/puppetlabs/puppetlabs-stdlib"
