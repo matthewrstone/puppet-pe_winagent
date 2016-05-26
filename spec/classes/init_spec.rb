@@ -52,7 +52,7 @@ describe 'pe_winagent', :type => :class do
         .with_content(/\$ca = \"caserver.local\"/)
         .with_content(/\$source = \"https:\/\/puppetmaster.local:8140\/packages\/current\/windows\"/)
         .with_content(/\$package = \"puppet-enterprise-3.8.0-x64.msi\"/)
-        .with_content(/\$puppet = \"C:\\Program Files \(x86\)\\Puppet Labs\\Puppet\\bin\\puppet.bat\"/)
+        .with_content(/\$puppet = \"C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet.bat\"/)
     end
   end
 
