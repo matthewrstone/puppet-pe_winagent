@@ -5,7 +5,7 @@
 
 pe_winagent is a module that helps with automating the installation process of Puppet Enterprise on Windows servers by riffing on the Linux 'curl' [installation method for Puppet Enterprise](https://docs.puppetlabs.com/pe/latest/install_agents.html) installation process. It currently supports Puppet Enterprise 3.3, 3.7, 3.8, 2015.x and 2016.x.
 
-The module runs on the master and stores the Windows puppet agent MSI for installation.  The module also provides a PowerShell module to include in your Windows images to automate or kick off installation on demand.
+The `pe_winagent` class runs on the puppet master and manages the Windows puppet agent MSI and installation scripts, while the `pe_winagent::powershell_host` class manages a PowerShell module that can be included in your Windows images to automate or kick off installation on demand. (Note: there's still a manual copy process to get the module on the image. No puppet before puppet until I get wizard powers).
 
 ##Installation
 
@@ -19,7 +19,7 @@ If you're seeing this from the Puppet Forge, a simple `puppet module install sou
 
 ### pe_winagent
 
-Apply the pe_winagent class to your puppetmaster and any compilers.  This will download the appropriate puppet agent MSI into the packages/current/windows directory.
+Apply the `pe_winagent` class to your puppetmaster and any compilers.  This will download the appropriate puppet agent MSI into the packages/current/windows directory.
 
 #### Parameters
 
