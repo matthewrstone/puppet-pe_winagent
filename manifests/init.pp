@@ -19,13 +19,14 @@ class pe_winagent(
     if $::pe_build =~ /^3.3/ {
       $msi = "puppet-enterprise-${::pe_build}.msi"
       $puppet_root = 'C:\Program Files (x86)\Puppet Labs'
+      $puppet_bat  = "${puppet_root}\\Puppet Enterprise\\bin\puppet.bat"
     } else {
       $msi = "puppet-enterprise-${::pe_build}-x64.msi"
       $puppet_root = 'C:\Program Files\Puppet Labs'
+      $puppet_bat  = "${puppet_root}\\Puppet\\bin\\puppet.bat"
     }
     $s3_path    = "pe-builds/released/${::pe_build}"
     $s3_url     = "${s3_link}/pe-builds/released/${::pe_build}/${msi}"
-    $puppet_bat = "${puppet_root}\\Puppet Enterprise\\bin\\puppet.bat"
   }
 
   file { $win_dir : ensure => directory }
