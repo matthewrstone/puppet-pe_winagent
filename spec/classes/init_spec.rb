@@ -44,9 +44,9 @@ describe 'pe_winagent', :type => :class do
     end
     it 'with defaults' do
       is_expected.to contain_file('/opt/puppet/mock/3.8.0/windows')
-      is_expected.to contain_pe_staging__file('puppet-enterprise-3.8.0.msi').with({
-      :source => 'https://s3.amazonaws.com/pe-builds/released/3.8.0/puppet-enterprise-3.8.0.msi',
-      :target => '/opt/puppet/mock/3.8.0/windows/puppet-enterprise-3.8.0.msi',})
+      is_expected.to contain_pe_staging__file('puppet-enterprise-3.8.0-x64.msi').with({
+      :source => 'https://s3.amazonaws.com/pe-builds/released/3.8.0/puppet-enterprise-3.8.0-x64.msi',
+      :target => '/opt/puppet/mock/3.8.0/windows/puppet-enterprise-3.8.0.msi-x64',})
       is_expected.to contain_file('/opt/puppet/mock/3.8.0/install.ps1')
         .with_content(/\$master = \"puppetmaster.local\"/)
         .with_content(/\$ca = \"caserver.local\"/)
@@ -80,7 +80,7 @@ describe 'pe_winagent', :type => :class do
         .with_content(/\$ca = \"caserver.local\"/)
         .with_content(/\$source = \"https:\/\/puppetmaster.local:8140\/packages\/current\/windows\"/)
         .with_content(/\$package = \"puppet-agent-1.4.1-x64.msi\"/)
-        .with_content(/\$puppet = \"C:\\Program Files\\Puppet Labs\\Puppet Enterprise\\bin\\puppet.bat\"/)
+        .with_content(/\$puppet = \"C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet.bat\"/)
     end
   end
 end

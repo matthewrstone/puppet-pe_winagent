@@ -49,7 +49,7 @@ function configurePuppet {
   } else {
     Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set ca_server $master --section main }
   }
-  Invoke-Command -ScriptBlock { cmd.exe /c "$puppet" config set server $master --section main }
+  Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set server $master --section main }
   #Invoke-Command -ScriptBlock { cmd.exe /c "$puppet" config set archive_file_server $master --section main }
 }
 
