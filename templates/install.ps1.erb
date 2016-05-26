@@ -45,12 +45,12 @@ function configurePuppet {
     Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set certname $CertName --section main }
   }
   If ($CAServer) { 
-    Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set server $CAServer --section main }
+    Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set ca_server $CAServer --section main }
   } else {
-    Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set server $master --section main }
+    Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set ca_server $master --section main }
   }
-  Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set ca_server $ca --section main }
-  #Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set archive_file_server $master --section main }
+  Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set server $master --section main }
+  #Invoke-Command -ScriptBlock { cmd.exe /c "$puppet" config set archive_file_server $master --section main }
 }
 
 downloadPuppet
