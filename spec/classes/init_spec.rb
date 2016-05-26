@@ -30,6 +30,33 @@ describe 'pe_winagent', :type => :class do
     end
   end
 
+  context 'Puppet Enterprise 3.8.x' do
+    let(:facts) do
+      {
+        :pe_build => "3.8.0"
+      }
+    end
+    let(:params) do
+      {
+        :puppetserver => 'puppetmaster.local',
+        :caserver     => 'caserver.local',
+      }
+    end
+    it 'with defaults' do
+      is_expected.to contain_file('/opt/puppet/mock/3.8.0/windows')
+      is_expected.to contain_pe_staging__file('puppet-enterprise-3.8.0.msi').with({
+      :source => 'https://s3.amazonaws.com/pe-builds/released/3.8.0/puppet-enterprise-3.8.0.msi',
+      :target => '/opt/puppet/mock/3.8.0/windows/puppet-enterprise-3.8.0.msi',})
+      is_expected.to contain_file('/opt/puppet/mock/3.8.0/install.ps1')
+        .with_content(/\$master = \"puppetmaster.local\"/)
+        .with_content(/\$ca = \"caserver.local\"/)
+        .with_content(/\$source = \"https:\/\/puppetmaster.local:8140\/packages\/current\/windows\"/)
+        .with_content(/\$package = \"puppet-enterprise-3.8.0.msi\"/)
+        .with_content(/\$puppet = \"C:\\Program Files \(x86\)\\Puppet Labs\\Puppet\\bin\\puppet.bat\"/)
+    end
+  end
+
+
   context 'Puppet Enterprise 2016.1.x' do
     let(:facts) do
       {
