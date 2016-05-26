@@ -46,7 +46,7 @@ describe 'pe_winagent', :type => :class do
       is_expected.to contain_file('/opt/puppet/mock/3.8.0/windows')
       is_expected.to contain_pe_staging__file('puppet-enterprise-3.8.0-x64.msi').with({
       :source => 'https://s3.amazonaws.com/pe-builds/released/3.8.0/puppet-enterprise-3.8.0-x64.msi',
-      :target => '/opt/puppet/mock/3.8.0/windows/puppet-enterprise-3.8.0.msi-x64',})
+      :target => '/opt/puppet/mock/3.8.0/windows/puppet-enterprise-3.8.0-x64.msi',})
       is_expected.to contain_file('/opt/puppet/mock/3.8.0/install.ps1')
         .with_content(/\$master = \"puppetmaster.local\"/)
         .with_content(/\$ca = \"caserver.local\"/)
