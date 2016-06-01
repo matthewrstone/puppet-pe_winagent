@@ -1,5 +1,5 @@
 #pe_winagent
-[![Build Status](https://travis-ci.org/matthewrstone/puppet-pe_winagent.svg?branch=master)](https://travis-ci.org/matthewrstone/puppet-pe_winagent)
+[![Build Status](https://travis-ci.org/matthewrstone/puppet-pe_winagent.svg?branch=develop)](https://travis-ci.org/matthewrstone/puppet-pe_winagent)
 
 ##Description
 
