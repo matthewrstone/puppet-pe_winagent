@@ -1,6 +1,6 @@
 {
   "name": "souldo-pe_winagent",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "author": "Matthew Stone",
   "summary": "Adds Windows MSI to PE. Includes PowerShell module for automating agent installation.",
   "license": "Apache-2.0",
@@ -19,7 +19,7 @@
   ],
   "operatingsystem_support": [
     {
-      "operatingsystem": "Windows",
+      "operatingsystem": "windows",
       "operatingsystemrelease": [
         "2008",
         "2012",

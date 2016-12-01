@@ -1,9 +1,10 @@
 # Puppet Entprise Windows 'Repo'
 class pe_winagent(
-  $puppetserver = $settings::server,
-  $caserver     = $settings::ca_server,
+  $puppetserver = hiera('pe_winagent::puppetserver', $settings::server),
+  $caserver     = hiera('pe_winagent::caserver', $settings::ca_server),
 ) {
-  include pe_repo
+
+  contain pe_repo
   $public_dir  = $::pe_repo::public_dir
   $s3_link     = 'https://s3.amazonaws.com'
   $win_dir     = "${public_dir}/${::pe_build}/windows"
