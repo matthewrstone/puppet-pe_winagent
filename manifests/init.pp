@@ -36,7 +36,7 @@ class pe_winagent(
     ensure  => file,
     content => template("${module_name}/install.ps1.erb"),
   }
-  
+
   pe_staging::file { $msi :
     source => $s3_url,
     target => "${win_dir}/${msi}",
