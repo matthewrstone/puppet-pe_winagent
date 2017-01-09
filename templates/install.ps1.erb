@@ -1,11 +1,19 @@
 Param(
   [string]$Temp,
   [String]$CertName,
-	[String]$CAServer
+  [String]$CAServer,
+  [String]$InstallDir,
+  [String]$Master,
+  [String]$Environment,
+  [String]$StartupMode,
+  [String]$AccountUser,
+  [String]$AccountPassword,
+  [String]$AccountDomain
 )
 
-$master = "<%= @puppetserver %>"
-$ca = "<%= @caserver %>"
+If !($Master) { $Master = "<%= @puppetserver %>" }
+If !($CAServer) { $CAServer = "<%= @caserver %>" }
+
 $puppet = "<%= @puppet_bat %>"
 $source = "https://<%= @puppetserver %>:8140/packages/current/windows"
 $package = "<%= @msi %>"
@@ -16,7 +24,7 @@ function downloadPuppet {
   $uri = "$source/$package"
   $obj = New-Object System.Net.WebClient
   $link = $obj.DownloadString($uri)
-  Write-Host "Downloading Puppet Enterprise <%= @pe_build %> on $env:COMPUTERNAME..."
+  Write-Host "Downloading Puppet Enterprise on $env:COMPUTERNAME..."
   Invoke-WebRequest $uri -OutFile $temp\$package
 }
 
@@ -25,7 +33,14 @@ function installPuppet {
   $opts = @("/qn")
   If ($CAServer) { $opts += "PUPPET_CA_SERVER=$CAServer "}
   If ($CertName) { $opts += "PUPPET_AGENT_CERTNAME=$CertName "}
-  Write-Host "Installing Puppet Enterprise <%= @pe_build %> on $env:COMPUTERNAME..."
+  If ($StartupMode) { $opts += "PUPPET_AGENT_STARTUP_MODE=$StartupMode" }
+  If ($InstallDir) { $opts += "INSTALLDIR = $InstallDir" }
+  If ($Master) { $opts += "PUPPET_MASTER_SERVER = $Master" }
+  If ($Environment) { $opts += "PUPPET_AGENT_ENVIRONMENT = $Environment" }
+  If ($AccountUser) { $opts += "PUPPET_AGENT_ACCOUNT_USER = $AccountUser" }
+  If ($AccountPassword) { $opts += "PUPPET_AGENT_ACCOUNT_PASSWORD = $AccountPassword" }
+  If ($AccountDomain) { $opts += "PUPPET_AGENT_ACCOUNT_DOMAIN = $AccountDomain" }
+  Write-Host "Installing Puppet Enterprise on $env:COMPUTERNAME..."
   Start-Process $install $opts -Wait
 }
 
@@ -40,17 +55,16 @@ function validateInstall {
 }
 
 function configurePuppet {
-  Write-Host "Configuring Puppet Enterprise <%= @pe_build %> on $env:COMPUTERNAME..."
+  Write-Host "Configuring Puppet Enterprise on $env:COMPUTERNAME..."
   If ($CertName) {
     Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set certname $CertName --section main }
   }
   If ($CAServer) { 
     Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set ca_server $CAServer --section main }
   } else {
-    Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set ca_server $master --section main }
+    Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set ca_server $Master --section main }
   }
-  Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set server $master --section main }
-  #Invoke-Command -ScriptBlock { cmd.exe /c "$puppet" config set archive_file_server $master --section main }
+  Invoke-Command -ScriptBlock { cmd.exe /c $puppet config set server $Master --section main }
 }
 
 downloadPuppet
@@ -58,6 +72,14 @@ downloadPuppet
 $params = @{}
 If ($CAServer) { $params += @{ CAServer = $CAServer } }
 If ($CertName) { $params += @{ CertName = $CertName } }
+If ($StartupMode) { $params += @{ StartupMode = $StartupMode } }
+If ($InstallDir) { $params += @{ InstallDir = $InstallDir } }
+If ($Master) { $params += @{ Master = $Master } }
+If ($Environment) { $params += @{ Environment = $Environment } }
+If ($AccountUser) { $params += @{ AccountUser = $AccountUser } }
+If ($AccountPassword) { $params += @{ AccountPassword = $AccountPassword } }
+If ($AccountDomain) { $params += @{ AccountDomain = $AccountDomain } }
+Write-Host "Installing Puppet Enterprise on $env:COMPUTERNAME..."
 
 installPuppet @params
 

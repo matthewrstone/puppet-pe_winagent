@@ -80,6 +80,10 @@ This is a PowerShell module with a few basic functions to install puppet either 
 
 ### Changelog
 
+**v2.2.0**
+
+- Add a switch to put set the agent service mode to DISABLED
+
 **v2.1.0**
 
 - Puppet Enterprise 2016.x is supported now.

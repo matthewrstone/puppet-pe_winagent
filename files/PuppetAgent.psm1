@@ -1,5 +1,5 @@
 #PuppetAgent.psm1
-$ModuleVersion = "2.1.0"
+$ModuleVersion = "2.2.0"
 
 Function Install-PuppetLocal {
 	Param(
@@ -9,7 +9,13 @@ Function Install-PuppetLocal {
 	  [Parameter(mandatory=$true)][String]$Master,
     [String]$CertName,
 	  [String]$CAServer = $Master,
-    [String]$Temp = "C:\Temp"
+    [String]$Temp = "C:\Temp",
+    [String]$InstallDir,
+    [String]$Environment,
+    [String]$StartupMode,
+    [String]$AccountUser,
+    [String]$AccountPassword,
+    [String]$AccountDomain
 	)
   
   If (!(Test-Path $Temp)) { New-Item -Type Directory -Path $Temp -Force}
@@ -33,6 +39,13 @@ Function Install-PuppetLocal {
   }
   If ($CAServer) { $params += @{ CAServer = $CAServer } }
   If ($CertName) { $params += @{ CertName = $CertName } }
+  If ($StartupMode) { $params += @{ StartupMode = $StartupMode } }
+  If ($InstallDir) { $params += @{ InstallDir = $InstallDir } }
+  If ($Master) { $params += @{ Master = $Master } }
+  If ($Environment) { $params += @{ Environment = $Environment } }
+  If ($AccountUser) { $params += @{ AccountUser = $AccountUser } }
+  If ($AccountPassword) { $params += @{ AccountPassword = $AccountPassword } }
+  If ($AccountDomain) { $params += @{ AccountDomain = $AccountDomain } }
   Invoke-Expression "$Temp\install.ps1 @params"
 }
 
@@ -114,8 +127,15 @@ Function Install-Puppet {
       }
       
 # Add CA and CertName if specified
-      If ($CertName) { $params += @{ CertName = $CertName } }
       If ($CAServer) { $params += @{ CAServer = $CAServer } }
+      If ($CertName) { $params += @{ CertName = $CertName } }
+      If ($StartupMode) { $params += @{ StartupMode = $StartupMode } }
+      If ($InstallDir) { $params += @{ InstallDir = $InstallDir } }
+      If ($Master) { $params += @{ Master = $Master } }
+      If ($Environment) { $params += @{ Environment = $Environment } }
+      If ($AccountUser) { $params += @{ AccountUser = $AccountUser } }
+      If ($AccountPassword) { $params += @{ AccountPassword = $AccountPassword } }
+      If ($AccountDomain) { $params += @{ AccountDomain = $AccountDomain } }
 
       Install-PuppetLocal @params
 	} 
