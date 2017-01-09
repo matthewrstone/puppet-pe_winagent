@@ -82,7 +82,7 @@ This is a PowerShell module with a few basic functions to install puppet either 
 
 **v2.2.0**
 
-- Add a switch to put set the agent service mode to DISABLED
+- Adding all the options for installation.
 
 **v2.1.0**
 
