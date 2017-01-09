@@ -3,7 +3,7 @@ language: ruby
 cache: bundler
 rvm:
   - 2.1.8
-script: bundle exec rake text
+script: bundle exec rake test
 branches:
   only:
     - master
