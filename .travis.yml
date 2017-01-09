@@ -1,21 +1,13 @@
 ---
 language: ruby
+cache: bundler
 rvm:
-  - 1.9.3
   - 2.1.8
-script: rake
-env:
-# https://docs.puppet.com/pe/latest/overview_version_table.html
-# Puppet Enterprise 3.3 / ruby 193
-  - PUPPET_VERSION=3.6.2
-# Puppet Enterprise 3.7 / ruby 193
-  - PUPPET_VERSION=3.7.0
-# Puppet 2015.3.3 / ruby 2.1.8
-  - PUPPET_VERSION=4.3.2 
-
+script: bundle exec rake text
+branches:
+  only:
+    - master
 matrix:
-  exclude:
-    - rvm: 1.9.3
-      env: PUPPET_VERSION="=>4"
-    - rvm: 2.1.8
-      env: PUPPET_VERSION="<=4"
+  include:
+    - rvm: 2.3.1
+    env: PUPPET_GEM_VERSION="~> 4.0" STRICT_VARIABLES=yes
