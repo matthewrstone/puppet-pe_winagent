@@ -72,8 +72,8 @@ describe 'pe_winagent', type: :class do
       is_expected.to contain_pe_staging__file('puppet-agent-1.4.1-x64.msi').with(source: 'https://s3.amazonaws.com/puppet-agents/2016.1/puppet-agent/1.4.1/repos/windows/puppet-agent-1.4.1-x64.msi',
                                                                                  target: '/opt/puppet/mock/2016.1.1/windows/puppet-agent-1.4.1-x64.msi')
       is_expected.to contain_file('/opt/puppet/mock/2016.1.1/install.ps1')
-        .with_content(/If !(\$Master) { \$Master = \"puppetmaster.local\" }/)
-        .with_content(/If !(\$CAServer) { \$CAServer = \"caserver.local\" }/)
+        .with_content(/^\s*If !\(\$Master\) { \$Master = \"puppetmaster.local\" }/)
+        .with_content(/If !\(\$CAServer\) { \$CAServer = \"caserver.local\" }/)
         .with_content(/\$source = \"https:\/\/puppetmaster.local:8140\/packages\/current\/windows\"/)
         .with_content(/\$package = \"puppet-agent-1.4.1-x64.msi\"/)
         .with_content(/\$puppet = \"C:\\Program Files\\Puppet Labs\\Puppet\\bin\\puppet.bat\"/)
