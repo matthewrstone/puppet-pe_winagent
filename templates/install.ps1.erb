@@ -2,7 +2,7 @@ Param(
   [string]$Temp,
   [String]$CertName,
   [String]$CAServer,
-  [String]$InstallDir,
+  [String]$InstallDir<% if @puppet_var != undef %>= "<%= @install_dir %>",<% end %>
   [String]$Master,
   [String]$Environment,
   [String]$StartupMode,

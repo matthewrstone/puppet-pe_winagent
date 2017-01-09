@@ -2,6 +2,7 @@
 class pe_winagent(
   $puppetserver = hiera('pe_winagent::puppetserver', $settings::server),
   $caserver     = hiera('pe_winagent::caserver', $settings::ca_server),
+  $install_dir  = undef
 ) {
 
   contain pe_repo

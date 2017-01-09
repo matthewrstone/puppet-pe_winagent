@@ -39,6 +39,7 @@ Function Install-PuppetLocal {
   }
   If ($CAServer) { $params += @{ CAServer = $CAServer } }
   If ($CertName) { $params += @{ CertName = $CertName } }
+  If ($InstallDir) { $params += @{ InstallDir = $InstallDir } }
   If ($StartupMode) { $params += @{ StartupMode = $StartupMode } }
   If ($InstallDir) { $params += @{ InstallDir = $InstallDir } }
   If ($Master) { $params += @{ Master = $Master } }
