@@ -2,8 +2,8 @@ Param(
   [string]$Temp,
   [String]$CertName,
   [String]$CAServer,
-  [String]$InstallDir<% if @puppet_var != undef %>= "<%= @install_dir %>",<% end %>
-  [String]$Master,
+  [String]$InstallDir<% if $install_dir { -%> <%= '$install_dir' %> <% } -%>,
+  [String]$Master<% if $puppetserver { -%> <%= '$puppetserver' %> <% } -%>,,
   [String]$Environment,
   [String]$StartupMode,
   [String]$AccountUser,
@@ -11,12 +11,12 @@ Param(
   [String]$AccountDomain
 )
 
-If !($Master) { $Master = "<%= @puppetserver %>" }
-If !($CAServer) { $CAServer = "<%= @caserver %>" }
+If !($Master) { $Master = "<%= $puppetserver %>" }
+If !($CAServer) { $CAServer = "<%= $caserver %>" }
 
-$puppet = "<%= @puppet_bat %>"
-$source = "https://<%= @puppetserver %>:8140/packages/current/windows"
-$package = "<%= @msi %>"
+$puppet = "<%= $puppet_bat %>"
+$source = "https://<%= $puppetserver %>:8140/packages/current/windows"
+$package = "<%= $msi %>"
 $install = "$temp\$source /qn"
 
 function downloadPuppet {
