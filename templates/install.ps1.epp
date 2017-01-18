@@ -1,9 +1,10 @@
+
 Param(
   [string]$Temp,
   [String]$CertName,
-  [String]$CAServer,
-  [String]$InstallDir<% if $install_dir { %> <%= '$install_dir' %> <% } %>,
-  [String]$Master<% if $puppetserver { %> <%= '$puppetserver' %> <% } %>,
+  [String]$CAServer<% if $caserver { -%><%= " = '${caserver}'" %><% } %>,
+  [String]$InstallDir<% if $install_dir { -%><%= " = '${install_dir}'" %><% } %>,
+  [String]$Master<% if $puppetserver { %> <%="= '${puppetserver}'"%><% } %>,
   [String]$Environment,
   [String]$StartupMode,
   [String]$AccountUser,
