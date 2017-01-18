@@ -35,7 +35,7 @@ class pe_winagent(
 
   file { "${public_dir}/${::pe_build}/install.ps1" :
     ensure  => file,
-    content => template("${module_name}/install.ps1.epp"),
+    content => epp("${module_name}/install.ps1.epp"),
   }
 
   pe_staging::file { $msi :
