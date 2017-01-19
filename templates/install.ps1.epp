@@ -1,16 +1,16 @@
-<%- | String $caserver,
-      String $puppetserver,
-      String $install_dir,
-      String $msi,
-      String $puppet_bat,
+<%- | String $pe_winagent::caserver,
+      String $pe_winagent::puppetserver,
+      String $pe_winagent::install_dir,
+      String $pe_winagent::msi,
+      String $pe_winagent::puppet_bat,
 | -%>
 
 Param(
   [string]$Temp,
   [String]$CertName,
-  [String]$CAServer<% if $caserver { -%><%= " = '${caserver}'" %><% } %>,
-  [String]$InstallDir<% if $install_dir { -%><%= " = '${install_dir}'" %><% } %>,
-  [String]$Master<% if $puppetserver { %> <%="= '${puppetserver}'"%><% } %>,
+  [String]$CAServer<% if $pe_winagent::caserver { -%><%= " = '$pe_winagent::caserver'" %><% } %>,
+  [String]$InstallDir<% if $pe_winagent::install_dir { -%><%= " = '$pe_winagent::install_dir'" %><% } %>,
+  [String]$Master<% if $pe_winagent::puppetserver { %> <%="= '$pe_winagent::puppetserver'"%><% } %>,
   [String]$Environment,
   [String]$StartupMode,
   [String]$AccountUser,
@@ -18,10 +18,10 @@ Param(
   [String]$AccountDomain
 )
 
-$puppet = "<%= $puppet_bat %>"
-$source = "https://<%= $puppetserver %>:8140/packages/current/windows"
-$package = "<%= $msi %>"
-$install = "$temp\$source /qn"
+$puppet = "<%= $pe_winagent::puppet_bat %>"
+$source = "https://<%= $pe_winagent::puppetserver %>:8140/packages/current/windows"
+$package = "<%= $pe_winagent::msi %>"
+$install = "$pe_winagent::temp\$source /qn"
 
 function downloadPuppet {
   [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}
