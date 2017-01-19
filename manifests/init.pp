@@ -1,6 +1,6 @@
 # Puppet Entprise Windows 'Repo'
 class pe_winagent(
-  $install_dir,
+  $install_dir  = undef,
   $puppetserver = lookup('pe_winagent::puppetserver', String, 'first', $settings::server),
   $caserver     = lookup('pe_winagent::caserver', String, 'first', $settings::server)
 ) {
