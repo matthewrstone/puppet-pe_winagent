@@ -1,7 +1,7 @@
 <%- | String $server,
       String $ca_server,
       String $install_dir,
-      String $environment,
+      String $puppet_environment,
       String $startupmode,
       String $accountuser,
       String $accountpass,
@@ -14,7 +14,7 @@ Param(
   [String]$CAServer<% if $ca_server { -%><%= " = '$ca_server'" %><% } %>,
   [String]$InstallDir<% if $install_dir { -%><%= " = '$install_dir'" %><% } %>,
   [String]$Master<% if $server { %> <%="= '$server'"%><% } %>,
-  [String]$Environment<% if $environment { %> <%="= '$environment'"%><% } %>,
+  [String]$Environment<% if $puppet_environment { %> <%="= '$puppet_environment'"%><% } %>,
   [String]$StartupMode<% if $startupmode { %> <%="= '$startupmode'"%><% } %>,
   [String]$AccountUser<% if $accountuser { %> <%="= '$accountuser'"%><% } %>,
   [String]$AccountPassword<% if $accountpassword { %> <%="= '$accountpassword'"%><% } %>,
@@ -23,11 +23,11 @@ Param(
 
 #$puppet = "<%= $pe_winagent::puppet_bat %>"
 #$source = "https://<%= $pe_winagent::puppetserver %>:8140/packages/current/windows"
-$package = "<%= $pe_winagent::msi %>"
+$package = "<%= $msi %>"
 #$install = "$temp\$source /qn"
 
 [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}
-$url = "https://<%= $pe_winagent::puppetserver %>:8140/packages/current/windows"
+$url = "https://<%= $server %>:8140/packages/current/windows"
 $obj = New-Object System.Net.WebClient
 $link = $obj.DownloadString($url)
 Write-Host "Downloading Puppet Enterprise on $env:COMPUTERNAME..."
