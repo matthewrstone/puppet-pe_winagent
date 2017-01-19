@@ -1,13 +1,13 @@
-<%- | String $server,
-      String $ca_server,
-      Variant[String, Undef] $install_dir,
-      Variant[String, Undef] $puppet_environment,
-      Variant[String, Undef] $startupmode,
-      Variant[String, Undef] $accountuser,
-      Variant[String, Undef] $accountpass,
-      Variant[String, Undef] $accountdomain,
-      Variant[String, Undef] $tempfolder,
-      String $msi
+<%- | $server,
+      $ca_server,
+      $install_dir,
+      $puppet_environment,
+      $startupmode,
+      $accountuser,
+      $accountpass,
+      $accountdomain,
+      $tempfolder,
+      $msi
 | %>
 Param(
   [string]$Temp<% if $tempfolder { -%><%= " = '$tempfolder'" %><% } %>,
