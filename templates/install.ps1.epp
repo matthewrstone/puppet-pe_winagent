@@ -1,3 +1,9 @@
+<%- | String $caserver,
+      String $puppetserver,
+      String $install_dir,
+      String $msi,
+      String $puppet_bat,
+| -%>
 
 Param(
   [string]$Temp,
