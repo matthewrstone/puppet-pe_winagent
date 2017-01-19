@@ -1,4 +1,5 @@
-# Puppet Entprise Windows 'Repo'
+# Class pe_winagent 
+# Description: Puppet Enterprise Windows 'Repo'
 class pe_winagent(
   String $server = lookup(
     'pe_winagent::server', String, 'first', $settings::server
