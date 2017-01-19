@@ -8,6 +8,7 @@
       Variant[String, Undef] $accountdomain,
       Variant[String, Undef] $tempfolder,
       String $msi
+| %>
 Param(
   [string]$Temp<% if $tempfolder { -%><%= " = '$tempfolder'" %><% } %>,
   [String]$CertName,
