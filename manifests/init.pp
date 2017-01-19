@@ -1,8 +1,8 @@
 # Puppet Entprise Windows 'Repo'
 class pe_winagent(
-  $puppetserver = hiera('pe_winagent::puppetserver', $settings::server),
-  $caserver     = hiera('pe_winagent::caserver', $settings::ca_server),
-  $install_dir  = undef
+  $install_dir,
+  $puppetserver = lookup('pe_winagent::puppetserver', String, 'first', $settings::server),
+  $caserver     = lookup('pe_winagent::caserver', String, 'first', $settings::server)
 ) {
 
   contain pe_repo
