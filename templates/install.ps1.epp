@@ -14,7 +14,7 @@ Param(
 $puppet = "<%= $pe_winagent::puppet_bat %>"
 $source = "https://<%= $pe_winagent::puppetserver %>:8140/packages/current/windows"
 $package = "<%= $pe_winagent::msi %>"
-$install = "$pe_winagent::temp\$source /qn"
+$install = "$temp\$source /qn"
 
 function downloadPuppet {
   [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}
