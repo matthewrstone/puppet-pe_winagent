@@ -45,8 +45,9 @@ class pe_winagent(
   file { "${public_dir}/${::pe_build}/install.ps1" :
     ensure  => file,
     content => epp("${module_name}/install.ps1.epp", {
-      server             => $ca_server,
-      ca_server          => $install_dir,
+      server             => $server,
+      install_dir        => $install_dir,
+      ca_server          => $ca_server,
       puppet_environment => $puppet_environment,
       startupmode        => $startupmode,
       accountuser        => $accountuser,
