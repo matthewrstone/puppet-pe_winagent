@@ -12,9 +12,6 @@ Param(
   [String]$AccountDomain
 )
 
-If !($Master) { $Master = "<%= $puppetserver %>" }
-If !($CAServer) { $CAServer = "<%= $caserver %>" }
-
 $puppet = "<%= $puppet_bat %>"
 $source = "https://<%= $puppetserver %>:8140/packages/current/windows"
 $package = "<%= $msi %>"
