@@ -10,7 +10,7 @@
       String $msi
 | %>
 Param(
-  [string]$Temp<% if $tempfolder { -%><%= " = '$tempfolder'" %><% } %>,
+  [String]$Temp<% if $tempfolder { -%><%= " = '$tempfolder'" %><% } %>,
   [String]$CertName,
   [String]$CAServer<% if $ca_server { -%><%= " = '$ca_server'" %><% } %>,
   [String]$InstallDir<% if $install_dir { -%><%= " = '$install_dir'" %><% } %>,
@@ -22,61 +22,38 @@ Param(
   [String]$AccountDomain<% if $accountdomain { %> <%="= '$accountdomain'"%><% } %>
 )
 
-#$puppet = "<%= $pe_winagent::puppet_bat %>"
-#$source = "https://<%= $pe_winagent::puppetserver %>:8140/packages/current/windows"
 $package = "<%= $msi %>"
-#$install = "$temp\$source /qn"
 
 [System.Net.ServicePointManager]::ServerCertificateValidationCallback={$true}
-$url = "https://<%= $server %>:8140/packages/current/windows"
+$url = "https://<%= $server %>:8140/packages/current/windows/$package"
 $obj = New-Object System.Net.WebClient
 $link = $obj.DownloadString($url)
 Write-Host "Downloading Puppet Enterprise on $env:COMPUTERNAME..."
-Invoke-WebRequest $uri -OutFile $Temp\$package
-
-$install = "${Temp}\$package"
-  $opts = @("/qn")
-  If ($CAServer) { $opts += "PUPPET_CA_SERVER=$CAServer "}
-  If ($CertName) { $opts += "PUPPET_AGENT_CERTNAME=$CertName "}
-  If ($StartupMode) { $opts += "PUPPET_AGENT_STARTUP_MODE=$StartupMode" }
-  If ($InstallDir) { $opts += "INSTALLDIR=$InstallDir" }
-  If ($Master) { $opts += "PUPPET_MASTER_SERVER=$Master" }
-  If ($Environment) { $opts += "PUPPET_AGENT_ENVIRONMENT=$Environment" }
-  If ($AccountUser) { $opts += "PUPPET_AGENT_ACCOUNT_USER=$AccountUser" }
-  If ($AccountPassword) { $opts += "PUPPET_AGENT_ACCOUNT_PASSWORD=$AccountPassword" }
-  If ($AccountDomain) { $opts += "PUPPET_AGENT_ACCOUNT_DOMAIN=$AccountDomain" }
-  Write-Host "Installing Puppet Enterprise on $env:COMPUTERNAME..."
-  Start-Process $install $opts -Wait
-}
-
-function validateInstall {
-  If ((Get-WmiObject -Class Win32_Product).Name -match 'Puppet') {
-    Write-Host "Puppet Enterprise has been installed on $env:COMPUTERNAME"
-  } else {
-    Throw {
-      "Something went wrong with the installation on $env:COMPUTERNAME.  Check the event log."
-    }
-  }
-}
-
-downloadPuppet
-
-$params = @{}
-If ($CAServer) { $params += @{ CAServer = $CAServer } }
-If ($CertName) { $params += @{ CertName = $CertName } }
-If ($StartupMode) { $params += @{ StartupMode = $StartupMode } }
-If ($InstallDir) { $params += @{ InstallDir = $InstallDir } }
-If ($Master) { $params += @{ Master = $Master } }
-If ($Environment) { $params += @{ Environment = $Environment } }
-If ($AccountUser) { $params += @{ AccountUser = $AccountUser } }
-If ($AccountPassword) { $params += @{ AccountPassword = $AccountPassword } }
-If ($AccountDomain) { $params += @{ AccountDomain = $AccountDomain } }
-Write-Host "Installing Puppet Enterprise on $env:COMPUTERNAME..."
+Invoke-WebRequest $url -OutFile $Temp\$package
 
 # Install the Puppet Agent
-installPuppet @params
+Write-Host "Installing Puppet Enterprise on $env:COMPUTERNAME..."
+$install = "${Temp}\${package}"
+$opts = @("/qn")
+If ($CAServer) { $opts += "PUPPET_CA_SERVER=$CAServer "}
+If ($CertName) { $opts += "PUPPET_AGENT_CERTNAME=$CertName "}
+If ($StartupMode) { $opts += "PUPPET_AGENT_STARTUP_MODE=$StartupMode" }
+If ($InstallDir) { $opts += "INSTALLDIR=$InstallDir" }
+If ($Master) { $opts += "PUPPET_MASTER_SERVER=$Master" }
+If ($Environment) { $opts += "PUPPET_AGENT_ENVIRONMENT=$Environment" }
+If ($AccountUser) { $opts += "PUPPET_AGENT_ACCOUNT_USER=$AccountUser" }
+If ($AccountPassword) { $opts += "PUPPET_AGENT_ACCOUNT_PASSWORD=$AccountPassword" }
+If ($AccountDomain) { $opts += "PUPPET_AGENT_ACCOUNT_DOMAIN=$AccountDomain" }
+Write-Host "Installing Puppet Enterprise on $env:COMPUTERNAME..."
+Start-Process $install $opts -Wait
 
-# Verify the Puppet Agent is installed
-validateInstall
+# Verify Puppet is installed
+If ((Get-WmiObject -Class Win32_Product).Name -match 'Puppet') {
+  Write-Host "Puppet Enterprise has been installed on $env:COMPUTERNAME"
+} else {
+  Throw {
+    "Something went wrong with the installation on $env:COMPUTERNAME.  Check the event log."
+  }
+}
 
 Write-Host "Installation has completed..."
