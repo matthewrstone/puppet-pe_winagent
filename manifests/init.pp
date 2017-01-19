@@ -6,25 +6,25 @@ class pe_winagent(
   String $ca_server = lookup(
     'pe_winagent::ca_server', String, 'first', $settings::server
   ),
-  String $install_dir = lookup(
+  Variant[String, Undef] $install_dir = lookup(
     'pe_winagent::install_dir', Variant[String, Undef], 'first', undef
   ),
-  Enum['automatic','manual','disabled'] $startupmode  = lookup(
+  Variant[Enum['automatic','manual','disabled'], Undef] $startupmode = lookup(
     'pe_winagent::startupmode', Variant[String, Undef], 'first', undef
   ),
-  String $puppet_environment = lookup(
+  Variant[String, Undef] $puppet_environment = lookup(
     'pe_winagent::environment', Variant[String, Undef], 'first', undef
   ),
-  String $accountuser = lookup(
+  Variant[String, Undef] $accountuser = lookup(
     'pe_winagent::accountuser', Variant[String, Undef], 'first', undef
   ),
-  String $accountpass = lookup(
+  Variant[String, Undef] $accountpass = lookup(
     'pe_winagent::accountpass', Variant[String, Undef], 'first', undef
   ),
-  String $accountdomain = lookup(
+  Variant[String, Undef] $accountdomain = lookup(
     'pe_winagent::accountdomain', Variant[String, Undef], 'first', undef
   ),
-  String $tempfolder = lookup(
+  Variant[String, Undef] $tempfolder = lookup(
     'pe_winagent::tempfolder', Variant[String, Undef], 'first', undef
   )
 ) {
